@@ -10,5 +10,5 @@ import com.sfm.qoentum.entity.Role;
 
 
 public interface RoleRepository extends MongoRepository<Role, String> {
-  
+	Optional<Role> findByName(ERole name);
 }

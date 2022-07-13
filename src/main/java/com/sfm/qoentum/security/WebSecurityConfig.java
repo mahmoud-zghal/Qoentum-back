@@ -1,5 +1,9 @@
 package com.sfm.qoentum.security;
 
+import java.util.Base64;
+import java.util.Date;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,8 +18,14 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.sfm.qoentum.security.jwt.AuthEntryPointJwt;
+import com.sfm.qoentum.security.jwt.AuthTokenFilter;
 
 
+
+
+
+@SuppressWarnings("deprecation")
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
@@ -24,8 +34,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 		prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
-
 	
+
+	@Autowired
+	private AuthEntryPointJwt unauthorizedHandler;
+	@Autowired
+	UserDetailsServiceImpl userDetailsService;
 
 	@Bean
 	public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -44,6 +58,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+	 
+	@Override
+	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Override
