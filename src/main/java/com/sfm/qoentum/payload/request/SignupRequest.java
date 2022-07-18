@@ -4,7 +4,7 @@ import java.util.Set;
 
 import javax.validation.constraints.Email;
 
-import com.sfm.qoentum.entity.Role;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class SignupRequest {
     @Email
     private String email;
     
-    private Set<Role> roles;
+    private Set<String> roles;
     
     
     private String password;
