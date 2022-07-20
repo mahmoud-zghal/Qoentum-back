@@ -1,5 +1,9 @@
 package com.sfm.qoentum.controller;
 
+import javax.annotation.security.RolesAllowed;
+
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,19 +20,22 @@ public class TestController {
 	}
 	
 	@GetMapping("/user")
-	@PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+	@PreAuthorize("hasRole('USER') or hasRole('ROLE_MODERATOR') or hasRole('ADMIN')")
 	public String userAccess() {
 		return "User Content.";
 	}
 
 	@GetMapping("/mod")
-	@PreAuthorize("hasRole('MODERATOR')")
+	//("hasAuthority('ROLE_MODERATOR')")
+	@RolesAllowed("ROLE_MODERATOR")
+	//@PreAuthorize("hasRole('MODERATOR')")
+	
 	public String moderatorAccess() {
 		return "Moderator Board.";
 	}
 
 	@GetMapping("/admin")
-	@PreAuthorize("hasRole('ADMIN')")
+	//@PreAuthorize("hasRole('ADMIN')")
 	public String adminAccess() {
 		return "Admin Board.";
 	}
