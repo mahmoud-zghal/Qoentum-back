@@ -33,7 +33,7 @@ import com.sfm.qoentum.security.jwt.AuthTokenFilter;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(
 		securedEnabled = true,
-		// jsr250Enabled = true,
+		 jsr250Enabled = true,
 		prePostEnabled = true,
 		proxyTargetClass = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -66,18 +66,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf()
-        .disable()
-        .authorizeRequests()
-        .and()
-        .httpBasic()
-        .and()
-        .authorizeRequests()
-        .anyRequest()
-        .permitAll()
-        .and()
-        .sessionManagement()
-        .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.cors().and().csrf().disable()
+			.exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+			.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+			.authorizeRequests().antMatchers("/api/auth/**").permitAll()
+			.antMatchers("/api/**").permitAll()
+			.anyRequest().authenticated();
 
 		http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 	}

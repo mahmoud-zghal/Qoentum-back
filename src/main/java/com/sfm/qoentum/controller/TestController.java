@@ -10,7 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+//@CrossOrigin("http://localhost:8088")
+
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
@@ -27,15 +28,15 @@ public class TestController {
 
 	@GetMapping("/mod")
 	//("hasAuthority('ROLE_MODERATOR')")
-	@RolesAllowed("ROLE_MODERATOR")
-	//@PreAuthorize("hasRole('MODERATOR')")
+	//@RolesAllowed("ROLE_MODERATOR")
+	@PreAuthorize("hasRole('MODERATOR')")
 	
 	public String moderatorAccess() {
 		return "Moderator Board.";
 	}
 
 	@GetMapping("/admin")
-	//@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasRole('ADMIN')")
 	public String adminAccess() {
 		return "Admin Board.";
 	}
