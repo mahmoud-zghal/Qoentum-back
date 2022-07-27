@@ -1,7 +1,9 @@
 package com.sfm.qoentum.controller;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +20,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sfm.qoentum.entity.ERole;
+import com.sfm.qoentum.entity.Role;
 import com.sfm.qoentum.entity.User;
+import com.sfm.qoentum.payload.request.SignupRequest;
+import com.sfm.qoentum.repository.RoleRepository;
 import com.sfm.qoentum.repository.UserRepository;
+
 
 
 
@@ -32,6 +39,8 @@ public class UserController {
 	UserRepository userRepo;
 	@Autowired
     private PasswordEncoder passwordEncoder;
+	@Autowired
+	RoleRepository roleRepository;
 	
 	/*@PostMapping("/createUser")
 	public void createUser(@RequestBody User u){
@@ -42,18 +51,28 @@ public class UserController {
 	}*/
 	
 	@PutMapping("/updateUser/{id}")
-	public void UpdateUser(@PathVariable("id") String id,@RequestBody User user){
+	public User UpdateUser(@PathVariable("id") String id,@RequestBody User user){
 		User u=userRepo.findById(id).orElse(null);
 		//user.setId(id);
 		//u=user;
 		//return u;
 		
-		u.setName(user.getName());
+		//u.setName(user.getName());
 		u.setUsername(user.getUsername());
 		u.setEmail(user.getEmail());
 		//u.setRoles(user.getRoles());
 		//u.setPassword(user.getPassword());
+		
+		
+		
+		
+		/*Role userRole = roleRepository.findByName(ERole.ROLE_USER).orElse(null);
+		roles.add(userRole);
+		u.setRoles(roles); */
 		userRepo.save(u);
+		return u;
+		
+		
 		
 		
 		
