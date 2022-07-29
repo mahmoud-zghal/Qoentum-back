@@ -26,6 +26,7 @@ public class ContinentController {
 	
 	@PostMapping("/createContinent")
 	public Continent createContinent(@RequestBody Continent c){
+		
 		continentRepo.save(c);
 		return c;
 	}
@@ -49,12 +50,15 @@ public class ContinentController {
 	@DeleteMapping("/deleteContinent/{id}")
 	public MessageResponse DeleteContinet(@PathVariable ("id") String id){
 		
-		continentRepo.deleteById(id);
+		
 		if(continentRepo.existsById(id)){
-			return new MessageResponse("Error while deleting :id not found");
+			
+			continentRepo.deleteById(id);
+			return new MessageResponse("Delete has been successful");
 			
 		}else{
-			return new MessageResponse("Delete has been successful");
+		
+			return new MessageResponse("Error while deleting :id not found");
 		}
 
 	}

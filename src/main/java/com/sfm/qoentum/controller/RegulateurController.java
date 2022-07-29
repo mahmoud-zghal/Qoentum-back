@@ -2,8 +2,6 @@ package com.sfm.qoentum.controller;
 
 import java.util.List;
 
-import javax.swing.plaf.synth.Region;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,64 +14,63 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sfm.qoentum.entity.Continent;
+import com.sfm.qoentum.entity.Pays;
 import com.sfm.qoentum.entity.Regions;
+import com.sfm.qoentum.entity.Regulateur;
 import com.sfm.qoentum.payload.response.MessageResponse;
-import com.sfm.qoentum.repository.ContinentRepository;
+import com.sfm.qoentum.repository.PaysRepository;
 import com.sfm.qoentum.repository.RegionsRepository;
+import com.sfm.qoentum.repository.RegulateurRepository;
 
 @RestController
-@RequestMapping("/api/regions")
+@RequestMapping("/api/regulateurs")
 @ResponseBody
-public class RegionsController {
-	
-	
+public class RegulateurController {
 	@Autowired
-	RegionsRepository regionRepo;
-	
+	RegulateurRepository regulateurRepo;
 	@Autowired
-	ContinentRepository continentRepo;
-	@PostMapping("/createRegion")
-	public Regions createRegion(@RequestBody Regions r){
+	PaysRepository paysRepo;
+	
+	@PostMapping("/createRegulateur")
+	public Regulateur createRegulateur(@RequestBody Regulateur r){
 		
-		Continent c=continentRepo.findByName(r.getContinent().getName()).orElse(null);
-		r.setContinent(c);
-		regionRepo.save(r);
+		Pays p=paysRepo.findByName(r.getPays().getName()).orElse(null);
+		r.setPays(p);
+		regulateurRepo.save(r);
 		return r;
 	}
 	
-	@PutMapping("/updateRegion/{id}")
-	public Regions UpdateRegion(@PathVariable ("id") String id,@RequestBody Regions r){
-		Continent c=continentRepo.findByName(r.getContinent().getName()).orElse(null);
-		r.setContinent(c);
-		Regions reg=regionRepo.findById(id).orElse(null);
+	@PutMapping("/updateRegulateur/{id}")
+	public Regulateur UpdateRegion(@PathVariable ("id") String id,@RequestBody Regulateur r){
+		Pays p=paysRepo.findByName(r.getPays().getName()).orElse(null);
+		r.setPays(p);
+		Regulateur reg=regulateurRepo.findById(id).orElse(null);
 		reg.setName(r.getName());
-		reg.setContinent(c);
-		regionRepo.save(reg);
+		reg.setPays(r.getPays());
+		regulateurRepo.save(reg);
 		
 		return reg;
 	}
 	
-	@GetMapping("/getAllRegions")
-	public List<Regions>getAllRegions(){
-		List<Regions>regs= regionRepo.findAll();
+	@GetMapping("/getAllRegulateur")
+	public List<Regulateur>getAllRegulateurs(){
+		List<Regulateur>regs= regulateurRepo.findAll();
 		return regs;
 		
 	}
 	
-	@DeleteMapping("/deleteRegions/{id}")
+	@DeleteMapping("/deleteRegulateur/{id}")
 	public MessageResponse DeleteRegions(@PathVariable ("id") String id){
 		
 		
-		if(regionRepo.existsById(id)){
+		if(regulateurRepo.existsById(id)){
 			
-			regionRepo.deleteById(id);
+			regulateurRepo.deleteById(id);
 			return new MessageResponse("Delete has been successful");
 		}else{
 			return new MessageResponse("Error while deleting :id not found");
 		}
 
 	}
-	
-	
 
-	}
+}
